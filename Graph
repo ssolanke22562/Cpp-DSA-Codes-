@@ -1,0 +1,89 @@
+/*Design a program to represent multiple cities and the fuel required to travel between them using a graph data structure.*/
+
+#include<iostream>
+using namespace std;
+
+class GH
+{
+    int a,b,c,d;
+    string city[10];
+    int fuel;
+    int ad[10][10];
+public:
+    void create();
+    void display();
+    void display_list();
+};
+
+void GH::create()
+{
+    cout<<"Enter the Number of the Cities"<<endl;
+    cin>>a;
+
+    cout<<"Enter the Name of the City"<<endl;
+    for(c=0;c<a;c++)
+    {
+        cin>>city[c];
+    }
+
+    for(c=0;c<a;c++)
+    {
+        for(d=0;d<a;d++)
+        {
+            if(c==d)
+            {
+                ad[c][d]=0;
+            }
+            else
+            {
+                cout<<endl<<"Enter fuel from "<<city[c]<<" to "<<city[d]<<": ";
+                cin>>fuel;
+                ad[c][d]=fuel;
+            }
+        }
+    }
+}
+
+void GH::display()
+{
+    cout<<"\nAdjacency Matrix:\n\n\t";
+    for(c=0;c<a;c++)
+    {
+        cout<<city[c]<<"\t";
+    }
+
+    for(c=0;c<a;c++)
+    {
+        cout<<"\n"<<city[c]<<"\t";
+        for(d=0;d<a;d++)
+        {
+            cout<<ad[c][d]<<"\t";
+        }
+    }
+}
+
+void GH::display_list()
+{
+    cout<<"\n\nAdjacency List:\n";
+    for(c=0;c<a;c++)
+    {
+        cout<<city[c]<<" -> ";
+        for(d=0;d<a;d++)
+        {
+            if(ad[c][d] != 0)
+            {
+                cout<<"("<<city[d]<<","<<ad[c][d]<<") ";
+            }
+        }
+        cout<<endl;
+    }
+}
+
+int main()
+{
+    GH g;
+    g.create();
+    g.display();
+    g.display_list();
+    return 0;
+}
