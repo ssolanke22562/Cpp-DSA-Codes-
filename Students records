@@ -1,0 +1,262 @@
+/* PROBLEM STATEMENT:-Design and implement a Student Information System using a Binary Search Tree (BST) data structure, where student records are organized based on their CET (Common Entrance Test) scores.
+Each student record should contain:
+Name of the student
+Seat number
+CET score*/ 
+
+//Student Information System Using Binary Search Tree Based on CET Score
+#include <iostream>
+#include <string>
+using namespace std;
+class stud 
+{
+public:
+    int cet_score;
+    int seat_no;
+    string name;
+    stud *left, *right;
+    stud() 
+    {
+        left = right = NULL;
+    }
+    
+    void create(stud* &root);
+    void add_new(stud* &root);
+    void insert(stud* curr, stud* nxt);
+    void search(stud* root);
+    void display(stud* root);            
+    void display_iitian(stud* root);
+    void display_non_iitian(stud* root);
+    void display_topper(stud* root);
+    void display_least(stud* root);
+    int height(stud* root);
+};
+
+void stud::create(stud* &root) 
+{
+    root = new stud();
+    cout << "Enter name seat_no cet_score: ";
+    cin >> root->name >> root->seat_no >> root->cet_score;
+}
+
+void stud::add_new(stud* &root) 
+{
+    stud* nxt = new stud();
+    cout << "Enter name seat_no cet_score: ";
+    cin >> nxt->name >> nxt->seat_no >> nxt->cet_score;
+
+    if (root == NULL)
+        {
+            root = nxt;
+            
+        }
+    else
+        {
+            insert(root, nxt);
+        }
+}
+
+void stud::insert(stud* curr, stud* nxt) 
+{
+    if (nxt->cet_score < curr->cet_score) 
+    {
+        if (curr->left == NULL)
+        {
+            curr->left = nxt;
+            
+        }
+        else
+            {
+                insert(curr->left, nxt);
+            }
+    } 
+    else 
+    {
+        if (curr->right == NULL)
+            {
+                curr->right = nxt;
+                
+            }
+        else
+        {
+            insert(curr->right, nxt);
+        }
+    }
+}
+void stud::search(stud* root) 
+{
+    int score;
+    cout << "Enter CET score to search: ";
+    cin >> score;
+
+    while (root != NULL) 
+    {
+        if (root->cet_score == score) 
+        {
+            cout << "Found: " << root->name << " " << root->seat_no << " " << root->cet_score << endl;
+            return;
+        }
+        if (score < root->cet_score)
+        {
+            root = root->left;
+        }
+        else
+        {
+            root = root->right;
+    }
+    }
+    cout << "Not found\n";
+}
+
+void stud::display(stud* root) 
+{
+    stud* stack[50];
+    int top = -1;
+    stud* curr = root;
+
+    while (curr != NULL || top != -1) 
+    {
+        while (curr != NULL)
+        {
+            stack[++top] = curr;
+            curr = curr->left;
+        }
+
+        curr = stack[top--];
+        cout << curr->name << " " << curr->seat_no << " " << curr->cet_score << endl;
+
+        curr = curr->right;
+    }
+}
+
+void stud::display_iitian(stud* root) 
+{
+    stud* stack[50];
+    int top = -1;
+    stud* curr = root;
+
+    while (curr != NULL || top != -1) 
+    {
+        while (curr != NULL) 
+        {
+            stack[++top] = curr;
+            curr = curr->left;
+        }
+        curr = stack[top--];
+        if (curr->cet_score > 90)
+            cout << curr->name << " " << curr->seat_no << " " << curr->cet_score << endl;
+        curr = curr->right;
+    }
+}
+
+void stud::display_non_iitian(stud* root) 
+{
+    stud* stack[50];
+    int top = -1;
+    stud* curr = root;
+
+    while (curr != NULL || top != -1) 
+    {
+        while (curr != NULL) {
+            stack[++top] = curr;
+            curr = curr->left;
+        }
+
+        curr = stack[top--];
+        if (curr->cet_score <= 90)
+            cout << curr->name << " " << curr->seat_no << " " << curr->cet_score << endl;
+
+        curr = curr->right;
+    }
+}
+
+void stud::display_topper(stud* root) 
+{
+    if (root == NULL) return;
+
+    while (root->right != NULL)
+        root = root->right;
+    cout << "Topper: " << root->name << " "<< root->seat_no << " " << root->cet_score << endl;
+}
+
+void stud::display_least(stud* root)
+{
+    if (root == NULL) 
+    {
+        return;
+    }
+
+    while (root->left != NULL)
+        root = root->left;
+
+    cout << "Least: " << root->name << " "<< root->seat_no << " " << root->cet_score << endl;
+}
+
+int stud::height(stud* root) 
+{
+    if (root == NULL)
+    {
+        return 0;
+    }
+    int lh = height(root->left);
+    int rh = height(root->right);
+    return (lh > rh ? lh : rh) + 1;
+}
+
+int main() 
+{
+    stud s;
+    stud* root = NULL;
+    int choice;
+
+    do 
+    {
+        cout << "\nMenu\n";
+        cout << "1. Create root\n";
+        cout << "2. Add student\n";
+        cout << "3. Search\n";
+        cout << "4. Display all\n";
+        cout << "5. Display IITians\n";
+        cout << "6. Display Non-IITians\n";
+        cout << "7. Display Topper\n";
+        cout << "8. Display Least\n";
+        cout << "9. Height\n";
+        cout << "0. Exit\n";
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        switch (choice) 
+        {
+        case 1: 
+        s.create(root);
+        break;
+        case 2: 
+        s.add_new(root); 
+        break;
+        case 3: 
+        s.search(root); 
+        break;
+        case 4:
+        s.display(root); 
+        break;
+        case 5: 
+        s.display_iitian(root); 
+        break;
+        case 6: 
+        s.display_non_iitian(root); 
+        break;
+        case 7: 
+        s.display_topper(root); 
+        break;
+        case 8:
+        s.display_least(root); 
+        break;
+        case 9:
+        cout << "Height: " << s.height(root) << endl;
+        break;
+        }
+    } 
+    while (choice != 0);
+    return 0;
+}
+
