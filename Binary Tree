@@ -1,0 +1,150 @@
+/* Basic Working Cpp code for a Binary Tree Data Structure  */
+
+#include <iostream>
+using namespace std;
+struct Node
+{
+	int data;
+	Node* left;
+	Node* right;
+
+	Node(int val)
+	{
+		data = val;
+		left = right = nullptr;
+	}
+};
+
+class BinaryTree
+{
+private:
+	Node* root;
+
+public:
+	BinaryTree()
+	{
+		root = nullptr;
+	}
+	void create(int val)
+	{
+		if (root == nullptr)
+		{
+			root = new Node(val);
+			cout << "Root created with value " << val << endl;
+		}
+		else
+		{
+			cout << "Root already exists!" << endl;
+		}
+	}
+	void insert(Node* current, int val, char direction) {
+		if (current == nullptr)
+		{
+			cout << "Parent node not found!" << endl;
+			return;
+		}
+
+		if (direction == 'L')
+		{
+			if (current->left == nullptr)
+			{
+				current->left = new Node(val);
+				cout << "Inserted " << val << " to LEFT of " << current->data << endl;
+			}
+			else
+			{
+				cout << "Left child already exists!" << endl;
+			}
+		}
+		else if (direction == 'R')
+		{
+			if (current->right == nullptr)
+			{
+				current->right = new Node(val);
+				cout << "Inserted " << val << " to RIGHT of " << current->data << endl;
+			}
+			else
+			{
+				cout << "Right child already exists!" << endl;
+			}
+		}
+		else
+		{
+			cout << "Invalid direction! Use 'L' or 'R'." << endl;
+		}
+	}
+	void display(Node* current)
+	{
+		if (current != nullptr)
+		{
+			display(current->left);
+			cout << current->data << " ";
+			display(current->right);
+		}
+	}
+	Node* getRoot()
+	{
+		return root;
+	}
+	Node* search(Node* current, int val)
+	{
+		if (current == nullptr) return nullptr;
+		if (current->data == val) return current;
+
+		Node* leftSearch = search(current->left, val);
+		if (leftSearch != nullptr) return leftSearch;
+
+		return search(current->right, val);
+	}
+};
+int main()
+{
+	BinaryTree tree;
+	int choice, val, parentVal;
+	char dir;
+
+	cout << "Enter value for root: ";
+	cin >> val;
+	tree.create(val);
+
+	while (true) {
+		cout << "\nMenu:\n";
+		cout << "1. Insert new node\n";
+		cout << "2. Display inorder traversal\n";
+		cout << "3. Exit\n";
+		cout << "Enter choice: ";
+		cin >> choice;
+
+		switch (choice) {
+		case 1:
+			cout << "Enter parent node value: ";
+			cin >> parentVal;
+			cout << "Enter new node value: ";
+			cin >> val;
+			cout << "Enter direction (L/R): ";
+			cin >> dir;
+
+			{
+				Node* parent = tree.search(tree.getRoot(), parentVal);
+				if (parent != nullptr) {
+					tree.insert(parent, val, dir);
+				} else {
+					cout << "Parent node not found!" << endl;
+				}
+			}
+			break;
+
+		case 2:
+			cout << "Inorder Traversal: ";
+			tree.display(tree.getRoot());
+			cout << endl;
+			break;
+
+		case 3:
+			return 0;
+
+		default:
+			cout << "Invalid choice!" << endl;
+		}
+	}
+}
